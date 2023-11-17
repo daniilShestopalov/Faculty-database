@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import path
+from faculty_database.faculty import views
+
+'''urlpatterns = [
+    path('admin/', admin.site.urls),
+]'''
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', views.index, name='home'),
 ]

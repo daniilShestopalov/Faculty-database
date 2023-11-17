@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+<meta charset="UTF-8">
+
+{% block title %}Список кафедр{% endblock %}
+
+{% block content %}
+    <h1>Список кафедр</h1>
+
+    <!-- Форма добавления новой кафедры -->
+    <form action="{% url 'department_add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Название кафедры" required>
+        <input type="text" name="short_name" placeholder="Сокращённое название" required>
+        <button type="submit">Добавить кафедру</button>
+    </form>
+
+    <!-- Таблица кафедр -->
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название кафедры</th>
+                <th>Сокращённое название</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for department in departments %}
+                <tr>
+                    <td>{{ department.department_id }}</td>
+                    <td>{{ department.department_name }}</td>
+                    <td>{{ department.department_name_short }}</td>
+                    <td>
+                        <form action="{% url 'department_edit' department.department_id %}" method="get" style="display: inline;">
+                            <button type="submit">Редактировать</button>
+                        </form>
+                        <form action="{% url 'department_delete' department.department_id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту кафедру?');">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Кафедры не найдены</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

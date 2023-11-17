@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+<meta charset="UTF-8">
+
+{% block title %}Список групп{% endblock %}
+
+{% block content %}
+    <h1>Список групп</h1>
+
+    <!-- Форма добавления новой группы -->
+    <form action="{% url 'group_add' %}" method="post">
+        {% csrf_token %}
+        <input type="number" name="group_number" placeholder="Номер группы" required>
+        <input type="number" name="group_course_number" placeholder="Номер курса" required>
+        <select name="direction" required>
+            <option value="">Выберите направление</option>
+            {% for direction in directions %}
+                <option value="{{ direction.id }}">{{ direction.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="curator" required>
+            <option value="">Выберите куратора</option>
+            {% for curator in curators %}
+                <option value="{{ curator.id }}">{{ curator.first_name }} {{ curator.second_name }}</option>
+            {% endfor %}
+        </select>
+        <select name="group_leader">
+            <option value="">Выберите старосту группы</option>
+            {% for student in students %}
+                <option value="{{ student.id }}">{{ student.first_name }} {{ student.second_name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Добавить группу</button>
+    </form>
+
+    <!-- Таблица групп -->
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Номер группы</th>
+                <th>Номер курса</th>
+                <th>Направление</th>
+                <th>Куратор</th>
+                <th>Староста группы</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in groups %}
+                <tr>
+                    <td>{{ group.group_id }}</td>
+                    <td>{{ group.group_number }}</td>
+                    <td>{{ group.group_course_number }}</td>
+                    <td>{{ group.direction.direction_name }}</td>
+                    <td>{{ group.curator.curator_first_name }} {{ group.curator.curator_second_name }}</td>
+                    <td>{{ group.group_leader.student_first_name }} {{ group.group_leader.student_second_name }}</td>
+                    <td>
+                        <form action="{% url 'group_edit' group.group_id %}" method="get" style="display: inline;">
+                            <button type="submit">Редактировать</button>
+                        </form>
+                        <form action="{% url 'group_delete' group.group_id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту группу?');">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">Группы не найдены</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

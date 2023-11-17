@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+<meta charset="UTF-8">
+
+{% block title %}Список направлений{% endblock %}
+
+{% block content %}
+    <h1>Список направлений</h1>
+
+    <!-- Форма добавления нового направления -->
+    <form action="{% url 'direction_add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Название направления" required>
+        <input type="text" name="specialization" placeholder="Специализация">
+        <!-- Выбор кафедры -->
+        <select name="department" required>
+            <option value="">Выберите кафедру</option>
+            {% for department in departments %}
+                <option value="{{ department.id }}">{{ department.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Добавить направление</button>
+    </form>
+
+    <!-- Таблица направлений -->
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название направления</th>
+                <th>Специализация</th>
+                <th>Кафедра</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for direction in directions %}
+                <tr>
+                    <td>{{ direction.direction_id }}</td>
+                    <td>{{ direction.direction_name }}</td>
+                    <td>{{ direction.specialization }}</td>
+                    <td>{{ direction.department.department_name }}</td>
+                    <td>
+                        <form action="{% url 'direction_edit' direction.direction_id %}" method="get" style="display: inline;">
+                            <button type="submit">Редактировать</button>
+                        </form>
+                        <form action="{% url 'direction_delete' direction.direction_id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить это направление?');">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Направления не найдены</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

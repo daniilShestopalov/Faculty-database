@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мой веб-сайт{% endblock %}</title>
+    <!-- Подключение CSS Bootstrap для стилизации -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f1f9; /* светло-фиолетовый фон */
+            color: #3d2c52; /* темно-фиолетовый текст */
+        }
+
+        .navbar {
+            background-color: #5d547a; /* фиолетовая навигационная панель */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #e7d9ea; /* светлый текст в навигации */
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: #fff;
+        }
+
+        .navbar-toggler {
+            border-color: #e7d9ea;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='%23e7d9ea' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .container {
+            background-color: #fff; /* белый фон для контента */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(61, 44, 82, 0.1); /* легкая тень для контента */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #3d2c52;
+        }
+
+        a {
+            color: #5d547a; /* фиолетовые ссылки */
+        }
+
+        a:hover {
+            color: #312244;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{% url 'home' %}">Главная</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'curator_list' %}">Кураторы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'department_list' %}">Кафедры</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'direction_list' %}">Направления</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'group_list' %}">Группы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'student_list' %}">Студенты</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Контентная часть -->
+    <div class="container mt-4">
+        {% block content %}
+        <!-- Содержимое будет вставлено сюда из дочерних шаблонов -->
+        {% endblock %}
+    </div>
+
+    <!-- Подключение JavaScript Bootstrap и зависимостей -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.6.6/dist/umd/popper.min.js"></script>
