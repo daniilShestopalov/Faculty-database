@@ -17,24 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import path
-from faculty_database_project.faculty import views
-from faculty_database_project.faculty.views import curator_list, delete_curator
+from faculty import views
 
-'''urlpatterns = [
+urlpatterns = [
     path('admin/', admin.site.urls),
-]'''
+]
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('curators/', curator_list, name='curator_list'),
-    path('curators/delete/<int:curator_id>/', delete_curator, name='curator_delete'),
+    path('curators/', views.curator_list, name='curator_list'),
+    path('curators/delete/<int:curator_id>/', views.delete_curator, name='curator_delete'),
     path('departments/', views.department_list, name='department_list'),
-    path('departments/delete/<int:department_id>/', views.delete_department, name='delete_department'),
+    path('departments/delete/<int:department_id>/', views.delete_department, name='department_delete'),
     path('directions/', views.direction_list, name='direction_list'),
-    path('directions/delete/<int:direction_id>/', views.delete_direction, name='delete_direction'),
+    path('directions/delete/<int:direction_id>/', views.delete_direction, name='direction_delete'),
     path('groups/', views.group_list, name='group_list'),
-    path('groups/delete/<int:group_id>/', views.delete_group, name='delete_group'),
+    path('groups/delete/<int:group_id>/', views.delete_group, name='group_delete'),
     path('students/', views.student_list, name='student_list'),
-    path('students/delete/<int:student_id>/', views.delete_student, name='delete_student'),
-
+    path('students/delete/<int:student_id>/', views.delete_student, name='student_delete'),
 ]
+

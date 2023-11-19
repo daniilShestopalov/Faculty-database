@@ -7,26 +7,7 @@
 {% block content %}
     <h1>Список студентов</h1>
 
-    <!-- Форма добавления нового студента -->
-    <form action="{% url 'student_add' %}" method="post">
-        {% csrf_token %}
-        <input type="text" name="first_name" placeholder="Имя" required>
-        <input type="text" name="second_name" placeholder="Фамилия" required>
-        <input type="text" name="middle_name" placeholder="Отчество">
-        <select name="group" required>
-            <option value="">Выберите группу</option>
-            {% for group in groups %}
-                <option value="{{ group.id }}">{{ group.group_number }}</option>
-            {% endfor %}
-        </select>
-        <select name="status" required>
-            <option value="">Выберите статус</option>
-            <option value="study">Учится</option>
-            <option value="alumnus">Выпускник</option>
-            <option value="expelled">Отчислен</option>
-        </select>
-        <button type="submit">Добавить студента</button>
-    </form>
+
 
     <!-- Таблица студентов -->
     <table class="table table-hover">
@@ -48,12 +29,10 @@
                     <td>{{ student.student_second_name }}</td>
                     <td>{{ student.student_first_name }}</td>
                     <td>{{ student.student_middle_name }}</td>
-                    <td>{{ student.group.group_number if student.group else 'Не задано' }}</td>
+                    <td>{{ student.group.group_number }}</td>
                     <td>{{ student.student_status }}</td>
                     <td>
-                        <form action="{% url 'student_edit' student.student_id %}" method="get" style="display: inline;">
-                            <button type="submit">Редактировать</button>
-                        </form>
+
                         <form action="{% url 'student_delete' student.student_id %}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этого студента?');">Удалить</button>

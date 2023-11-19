@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from faculty_database_project.faculty.models import Curator, Department, Direction, Group, Student
+from .models import Curator, Department, Direction, Student, Group
 
 
 def home(request):

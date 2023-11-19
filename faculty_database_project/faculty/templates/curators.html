@@ -7,15 +7,7 @@
 {% block content %}
     <h1>Список кураторов</h1>
 
-    <!-- Форма добавления нового куратора -->
-    <form action="{% url 'curator_add' %}" method="post">
-        {% csrf_token %}
-        <input type="text" name="first_name" placeholder="Имя" required>
-        <input type="text" name="second_name" placeholder="Фамилия" required>
-        <input type="text" name="middle_name" placeholder="Отчество">
-        <input type="text" name="contact_number" placeholder="Контактный номер" required>
-        <button type="submit">Добавить куратора</button>
-    </form>
+
 
     <!-- Таблица кураторов -->
     <table class="table table-hover">
@@ -38,9 +30,7 @@
                     <td>{{ curator.curator_middle_name }}</td>
                     <td>{{ curator.curator_contact_number }}</td>
                     <td>
-                        <form action="{% url 'curator_edit' curator.curator_id %}" method="get" style="display: inline;">
-                            <button type="submit">Редактировать</button>
-                        </form>
+
                         <form action="{% url 'curator_delete' curator.curator_id %}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этого куратора?');">Удалить</button>
