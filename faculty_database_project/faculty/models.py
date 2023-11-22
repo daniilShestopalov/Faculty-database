@@ -59,12 +59,22 @@ class Group(models.Model):
 
 
 class Student(models.Model):
+    STUDY = 'study'
+    ALUMNUS = 'alumnus'
+    EXPELLED = 'expelled'
+
+    STUDENT_STATUS_CHOICES = [
+        (STUDY, 'Study'),
+        (ALUMNUS, 'Alumnus'),
+        (EXPELLED, 'Expelled'),
+    ]
+
     student_id = models.AutoField(primary_key=True, db_comment='╩юф ёЄєфхэЄр')
     student_second_name = models.CharField(max_length=45, db_comment='╘рьшыш  ёЄєфхэЄр')
     student_first_name = models.CharField(max_length=45, db_comment='╚ь  ёЄєфхэЄр')
     student_middle_name = models.CharField(max_length=45, blank=True, null=True, db_comment='╬ЄўхёЄтю ёЄєфхэЄр')
     group = models.ForeignKey(Group, models.DO_NOTHING, blank=True, null=True, db_comment='╩юф уЁєяя√ ёЄєфхэЄр')
-    student_status = models.CharField(max_length=8)
+    student_status = models.CharField(max_length=8, choices=STUDENT_STATUS_CHOICES, default=STUDY,)
 
     class Meta:
         app_label = 'faculty'

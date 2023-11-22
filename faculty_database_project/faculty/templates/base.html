@@ -50,6 +50,73 @@
         a:hover {
             color: #312244;
         }
+        .modal-header {
+            background-color: #5d547a; /* фиолетовый фон для шапки модального окна */
+            color: #e7d9ea; /* светлый текст для шапки модального окна, такой же, как и в навигации */
+        }
+
+        .modal-content {
+            background-color: #f4f1f9; /* светло-фиолетовый фон для контента модального окна */
+            color: #3d2c52; /* темно-фиолетовый текст в модальном окне */
+        }
+
+        .modal-footer {
+            background-color: #f4f1f9; /* фон для подвала модального окна */
+        }
+
+        .modal-footer .btn {
+            background-color: #5d547a; /* фиолетовый фон для кнопок */
+            color: #e7d9ea; /* светлый текст для кнопок, такой же, как и в навигации */
+        }
+
+        .modal-footer .btn:hover {
+            background-color: #3d2c52; /* темнее фиолетовый фон для кнопок при наведении */
+        }
+
+        .close {
+            color: #e7d9ea; /* светлый цвет для крестика закрытия, такой же, как и в навигации */
+        }
+
+        .close:hover {
+            color: #fff; /* белый цвет для крестика закрытия при наведении */
+        }
+
+    /* Стилизация текста модального окна */
+        #errorModalLabel {
+            color: #e7d9ea; /* Светлый цвет текста, такой же как в навигации */
+        }
+
+        .inline-form button {
+        background-color: #5d547a; /* фиолетовый фон для кнопок */
+        color: #e7d9ea; /* светлый текст для кнопок */
+        border: none;
+        padding: 0.375rem 0.75rem; /* Паддинги Bootstrap для кнопок */
+        border-radius: 0.25rem; /* Скругление углов Bootstrap для кнопок */
+        margin-left: 5px; /* Небольшой отступ слева */
+        cursor: pointer; /* Курсор в виде указателя для кнопок */
+        }
+
+        .inline-form button:hover {
+        background-color: #3d2c52; /* темнее фиолетовый фон для кнопок при наведении */
+        color: #fff;
+        }
+
+        /* Стили для всплывающего окна подтверждения */
+        .inline-form button[data-confirm] {
+        }
+
+    .delete-button {
+        background-color: #5d547a; /* Фиолетовый фон кнопки */
+        color: #e7d9ea; /* Светлый текст кнопки */
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .delete-button:hover {
+        background-color: #3d2c52; /* Темнее фон кнопки при наведении */
+    }
     </style>
 </head>
 <body>
@@ -88,6 +155,50 @@
         {% endblock %}
     </div>
 
+    <!-- Модальное окно Bootstrap для сообщений об ошибках -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="errorModalLabel">Ошибка</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {% for message in messages %}
+              {% if message.tags == 'error' %}
+                {{ message }}
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Подключение JavaScript Bootstrap и зависимостей -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.6.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- JavaScript для отображения модального окна при наличии сообщения об ошибке -->
+    <script>
+      $(document).ready(function() {
+        {% if messages %}
+          var hasError = false;
+          {% for message in messages %}
+            {% if message.tags == 'error' %}
+              hasError = true;
+            {% endif %}
+          {% endfor %}
+          if (hasError) {
+            $('#errorModal').modal('show');
+          }
+        {% endif %}
+      });
+    </script>
+</body>
+</html>
