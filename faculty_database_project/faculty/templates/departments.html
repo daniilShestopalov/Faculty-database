@@ -7,6 +7,8 @@
 {% block content %}
     <h1>Список кафедр</h1>
 
+    <!-- Кнопка для добавления кафедры -->
+    <a href="{% url 'department_add' %}" class="btn btn-custom">Добавить кафедру</a>
 
 
     <!-- Таблица кафедр -->
@@ -29,7 +31,7 @@
 
                         <form action="{% url 'department_delete' department.department_id %}" method="post" style="display: inline;">
                             {% csrf_token %}
-                            <button type="submit" class="delete-button" onclick="return confirm('Вы уверены, что хотите удалить эту кафедру?');">Удалить</button>
+                            <button type="submit" class="btn btn-custom" onclick="return confirm('Вы уверены, что хотите удалить эту кафедру?');">Удалить</button>
                         </form>
                     </td>
                 </tr>
