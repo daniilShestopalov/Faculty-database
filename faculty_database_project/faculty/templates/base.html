@@ -111,9 +111,7 @@
           </div>
           <div class="modal-body">
             {% for message in messages %}
-              {% if message.tags == 'error' %}
-                {{ message }}
-              {% endif %}
+                {{ message|linebreaksbr }}
             {% endfor %}
           </div>
           <div class="modal-footer">
@@ -127,22 +125,5 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.6.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- JavaScript для отображения модального окна при наличии сообщения об ошибке -->
-    <script>
-      $(document).ready(function() {
-        {% if messages %}
-          var hasError = false;
-          {% for message in messages %}
-            {% if message.tags == 'error' %}
-              hasError = true;
-            {% endif %}
-          {% endfor %}
-          if (hasError) {
-            $('#errorModal').modal('show');
-          }
-        {% endif %}
-      });
-    </script>
 </body>
 </html>

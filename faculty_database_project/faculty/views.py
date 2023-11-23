@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.urls import reverse
 
-from .forms import DepartmentForm
+from .forms import DepartmentForm, CuratorForm
 from .models import Curator, Department, Direction, Student, Group
 
 
@@ -15,6 +15,26 @@ def home(request):
 def curator_list(request):
     curators = Curator.objects.all()
     return render(request, 'curators.html', {'curators': curators})
+
+def curator_add(request):
+    return render(request, 'curator_add.html')
+
+def curator_add_confirm(request):
+    if request.method == 'POST':
+        form = CuratorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Куратор успешно добавлен.')
+            return redirect('curator_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                field_label = form.fields[field].label
+                for error in error_messages:
+                    errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+        return curator_add(request)
 
 
 def delete_curator(request, curator_id):
@@ -40,11 +60,14 @@ def department_add_confirm(request):
             messages.success(request, 'Кафедра успешно добавлена.')
             return redirect('department_list')
         else:
-            messages.error(request, 'В форме обнаружены ошибки.')
-    else:
-        form = DepartmentForm()
+            errors = []
+            for field, error_messages in form.errors.items():
+                field_label = form.fields[field].label
+                for error in error_messages:
+                    errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
 
-    return render(request, 'departments/department_add.html', {'form': form})
+    return department_add(request)
 
 
 def delete_department(request, department_id):
