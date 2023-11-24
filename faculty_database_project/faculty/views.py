@@ -36,6 +36,28 @@ def curator_add_confirm(request):
 
         return curator_add(request)
 
+def curator_change(request, curator_id):
+    curator = Curator.objects.get(pk=curator_id)
+    return render(request, 'curator_change.html', {'curator': curator})
+
+def curator_change_confirm(request, curator_id):
+    curator = Curator.objects.get(pk=curator_id)
+    if request.method == 'POST':
+        form = CuratorForm(request.POST, instance=curator)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Куратор успешно изменен.')
+            return redirect('curator_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                field_label = form.fields[field].label
+                for error in error_messages:
+                    errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return curator_change(request, curator_id)
+
 
 def delete_curator(request, curator_id):
     curator = Curator.objects.get(pk=curator_id)
@@ -68,6 +90,28 @@ def department_add_confirm(request):
             messages.error(request, '\n'.join(errors))
 
     return department_add(request)
+
+def department_change(request, department_id):
+    department = Department.objects.get(pk=department_id)
+    return render(request, 'departmental_change.html', {'department': department})
+
+def department_change_confirm(request, department_id):
+    department = Department.objects.get(pk=department_id)
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST, instance=department)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Кафедра успешно изменена.')
+            return redirect('department_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                field_label = form.fields[field].label
+                for error in error_messages:
+                    errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return department_change(request, department_id)
 
 
 def delete_department(request, department_id):

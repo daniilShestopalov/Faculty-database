@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+<meta charset="UTF-8">
+
+
+{% block title %}Изменение кафедры{% endblock %}
+
+{% block content %}
+    <h1>Изменение кафедры</h1>
+
+    <form action="{% url 'department_change_confirm' department_id=department.department_id  %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="departmentName">Название кафедры:</label>
+            <input type="text" class="form-control" id="departmentName" name="department_name" placeholder="Введите название кафедры" required oninput="checkInput(this)" value="{{ department.department_name }}">
+        </div>
+        <div class="form-group">
+            <label for="departmentNameShort">Сокращённое название:</label>
+            <input type="text" class="form-control" id="departmentNameShort" name="department_name_short" placeholder="Введите сокращённое название" required oninput="checkInput(this)" value="{{ department.department_name_short }}">
+        </div>
+        <a href="{% url 'department_list' %}" class="btn btn-custom">Вернуться к списку кафедр</a>
+        <button type="submit" class="btn btn-custom">Изменить кафедру</button>
+    </form>
+
+    <script>
+        function checkInput(input) {
+            input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
+        }
+    </script>
+{% endblock %}

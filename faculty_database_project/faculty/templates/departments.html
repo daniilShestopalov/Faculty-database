@@ -28,7 +28,7 @@
                     <td>{{ department.department_name }}</td>
                     <td>{{ department.department_name_short }}</td>
                     <td>
-
+                        <a href="{% url 'department_change' department.department_id %}" class="btn btn-custom">Изменить</a>
                         <form action="{% url 'department_delete' department.department_id %}" method="post" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-custom" onclick="return confirm('Вы уверены, что хотите удалить эту кафедру?');">Удалить</button>
