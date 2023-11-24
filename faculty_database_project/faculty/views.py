@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.urls import reverse
 
-from .forms import DepartmentForm, CuratorForm
+from .forms import DepartmentForm, CuratorForm, DirectionForm
 from .models import Curator, Department, Direction, Student, Group
 
 
@@ -130,6 +130,27 @@ def delete_department(request, department_id):
 def direction_list(request):
     directions = Direction.objects.all()
     return render(request, 'directions.html', {'directions': directions})
+
+def direction_add(request):
+    departments = Department.objects.all()
+    return render(request, 'direction_add.html', {'departments': departments})
+
+def direction_add_confirm(request):
+    if request.method == 'POST':
+        form = DirectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Направление успешно добавлена.')
+            return redirect('direction_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                field_label = form.fields[field].label
+                for error in error_messages:
+                    errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return direction_add(request)
 
 
 def delete_direction(request, direction_id):

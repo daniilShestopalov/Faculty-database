@@ -66,3 +66,28 @@ class CuratorForm(forms.ModelForm):
             raise ValidationError("Номер телефона должен начинаться с '8' и состоять из 11 цифр.")
 
         return curator_contact_number
+
+class DirectionForm(forms.ModelForm):
+
+    class Meta:
+        model = Direction
+        fields = ['direction_name', 'specialization', 'department']
+
+    def clean_direction_name(self):
+        direction_name = self.cleaned_data['direction_name']
+
+        if not re.match(r'^[а-яА-ЯёЁ\s]+$', direction_name):
+            raise ValidationError("Название направления должно содержать только русские буквы.")
+
+        return direction_name
+
+    def clean_specialization(self):
+        specialization = self.cleaned_data['specialization']
+        if specialization:
+            if not re.match(r'^[а-яА-ЯёЁ\s]+$', specialization):
+                raise ValidationError("Специализация направления должна содержать только русские буквы.")
+        else:
+            raise ValidationError("Обязательное поле.")
+
+        return specialization
+
