@@ -100,20 +100,23 @@
     </div>
 
     <!-- Модальное окно Bootstrap для сообщений об ошибках -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="errorModalLabel">Ошибка</h5>
+            <h5 class="modal-title" id="errorModalLabel">Сообщение</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             {% for message in messages %}
-                {{ message|linebreaksbr }}
+                <div class="{{ message.tags }}" data-message-type="{{ message.tags }}">
+                    {{ message|linebreaksbr }}
+                </div>
             {% endfor %}
           </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
           </div>
@@ -125,5 +128,14 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.6.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        if ($(".modal-body div").length > 0) {
+            $('#messageModal').modal('show');
+        }
+    });
+    </script>
+
 </body>
 </html>

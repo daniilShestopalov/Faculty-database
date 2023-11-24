@@ -36,7 +36,7 @@
 
                         <form action="{% url 'direction_delete' direction.direction_id %}" method="post" style="inline-form">
                             {% csrf_token %}
-                            <button type="submit"  class="delete-button" onclick="return confirm('Вы уверены, что хотите удалить это направление?');">Удалить</button>
+                            <button type="submit"  class="btn btn-custom" onclick="return confirm('Вы уверены, что хотите удалить это направление?');">Удалить</button>
                         </form>
                     </td>
                 </tr>

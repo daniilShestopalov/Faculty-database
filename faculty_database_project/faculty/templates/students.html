@@ -51,7 +51,7 @@
 
                         <form action="{% url 'student_delete' student.student_id %}" method="post" style="inline-form">
                             {% csrf_token %}
-                            <button type="submit" class="delete-button" onclick="return confirm('Вы уверены, что хотите удалить этого студента?');">Удалить</button>
+                            <button type="submit" class="btn btn-custom" onclick="return confirm('Вы уверены, что хотите удалить этого студента?');">Удалить</button>
                         </form>
                     </td>
                 </tr>
