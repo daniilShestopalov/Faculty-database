@@ -6,6 +6,10 @@
     <title>{% block title %}Мой веб-сайт{% endblock %}</title>
     <!-- Подключение CSS Bootstrap для стилизации -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    {% load static %}
+    <link rel="icon" href="{% static 'images/favicon_transparent 2.png' %}" type="image/x-icon">
+
     <style>
         .table {
         margin-top: 15px; /* Добавляет отступ сверху таблицы */
@@ -60,6 +64,17 @@
         .btn-custom:hover, .btn-add:hover, .btn-submit:hover {
             background-color: #693d8a; /* ещё более тёмный фиолетовый при наведении */
             color: #fff;
+        }
+        .buttons-container {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        }
+        .buttons-container form {
+        display: inline;
+        }
+        .btn-custom {
+        margin: 0;
         }
     </style>
 </head>

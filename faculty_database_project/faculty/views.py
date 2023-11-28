@@ -152,6 +152,29 @@ def direction_add_confirm(request):
 
     return direction_add(request)
 
+def direction_change(request, direction_id):
+    departments = Department.objects.all()
+    direction = Direction.objects.get(pk=direction_id)
+    return render(request, 'direction_change.html', {'departments': departments, 'direction': direction})
+
+def direction_change_confirm(request, direction_id):
+    direction = Direction.objects.get(pk=direction_id)
+    if request.method == 'POST':
+        form = DirectionForm(request.POST, instance=direction)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Направление успешно изменено.')
+            return redirect('direction_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                field_label = form.fields[field].label
+                for error in error_messages:
+                    errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return direction_change(request, direction_id)
+
 
 def delete_direction(request, direction_id):
     try:

@@ -83,11 +83,9 @@ class DirectionForm(forms.ModelForm):
 
     def clean_specialization(self):
         specialization = self.cleaned_data['specialization']
-        if specialization:
+        if specialization is not None:
             if not re.match(r'^[а-яА-ЯёЁ\s]+$', specialization):
-                raise ValidationError("Специализация направления должна содержать только русские буквы.")
-        else:
-            raise ValidationError("Обязательное поле.")
+                    raise ValidationError("Специализация направления должна содержать только русские буквы.")
 
         return specialization
 

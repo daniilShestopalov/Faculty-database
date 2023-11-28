@@ -1,10 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+<meta charset="UTF-8">
+
+
+{% block title %}Изменение направления{% endblock %}
+
+{% block content %}
+    <h1>Изменение направления</h1>
+
+    <form action="{% url 'direction_change_confirm' direction_id=direction.direction_id %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="directionName">Название направления:</label>
+            <input type="text" class="form-control" id="directionName" name="direction_name" placeholder="Введите название направления" required oninput="checkInput(this)" value="{{ direction.direction_name }}">
+        </div>
+        <div class="form-group">
+            <label for="specialization">Специализация:</label>
+            <input type="text" class="form-control" id="specialization" name="specialization" placeholder="Введите специализацию" required oninput="checkInput(this)" value="{{ direction.specialization|default_if_none:'' }}">
+        </div>
+        <div class="form-group">
+            <label for="department">Кафедра:</label>
+           <select class="form-control" id="department" name="department" required>
+                {% for department in departments %}
+                    <option value="{{ department.department_id }}" {% if direction.department.department_id == department.department_id %}selected{% endif %}>
+                        {{ department.department_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+        </div>
+        <a href="{% url 'department_list' %}" class="btn btn-custom">Вернуться к списку направлений</a>
+        <button type="submit" class="btn btn-custom">Изменить направление</button>
+    </form>
+
+    <script>
+        function checkInput(input) {
+            input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
+        }
+    </script>
+{% endblock %}

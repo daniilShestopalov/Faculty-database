@@ -1,0 +1,79 @@
+<!-- Форма добавления нового куратора -->
+    <form action="{% url 'curator_add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="first_name" placeholder="Имя" required>
+        <input type="text" name="second_name" placeholder="Фамилия" required>
+        <input type="text" name="middle_name" placeholder="Отчество">
+        <input type="text" name="contact_number" placeholder="Контактный номер" required>
+        <button type="submit">Добавить куратора</button>
+    </form>
+
+<!-- Форма добавления новой кафедры -->
+    <form action="{% url 'department_add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Название кафедры" required>
+        <input type="text" name="short_name" placeholder="Сокращённое название" required>
+        <button type="submit">Добавить кафедру</button>
+    </form>
+
+ <!-- Форма добавления нового направления -->
+    <form action="{% url 'direction_add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Название направления" required>
+        <input type="text" name="specialization" placeholder="Специализация">
+        <!-- Выбор кафедры -->
+        <select name="department" required>
+            <option value="">Выберите кафедру</option>
+            {% for department in departments %}
+                <option value="{{ department.id }}">{{ department.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Добавить направление</button>
+    </form>
+
+    <!-- Форма добавления новой группы -->
+    <form action="{% url 'group_add' %}" method="post">
+        {% csrf_token %}
+        <input type="number" name="group_number" placeholder="Номер группы" required>
+        <input type="number" name="group_course_number" placeholder="Номер курса" required>
+        <select name="direction" required>
+            <option value="">Выберите направление</option>
+            {% for direction in directions %}
+                <option value="{{ direction.id }}">{{ direction.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="curator" required>
+            <option value="">Выберите куратора</option>
+            {% for curator in curators %}
+                <option value="{{ curator.id }}">{{ curator.first_name }} {{ curator.second_name }}</option>
+            {% endfor %}
+        </select>
+        <select name="group_leader">
+            <option value="">Выберите старосту группы</option>
+            {% for student in students %}
+                <option value="{{ student.id }}">{{ student.first_name }} {{ student.second_name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Добавить группу</button>
+    </form>
+
+    <!-- Форма добавления нового студента -->
+    <form action="{% url 'student_add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="first_name" placeholder="Имя" required>
+        <input type="text" name="second_name" placeholder="Фамилия" required>
+        <input type="text" name="middle_name" placeholder="Отчество">
+        <select name="group" required>
+            <option value="">Выберите группу</option>
+            {% for group in groups %}
+                <option value="{{ group.id }}">{{ group.group_number }}</option>
+            {% endfor %}
+        </select>
+        <select name="status" required>
+            <option value="">Выберите статус</option>
+            <option value="study">Учится</option>
+            <option value="alumnus">Выпускник</option>
+            <option value="expelled">Отчислен</option>
+        </select>
+        <button type="submit">Добавить студента</button>
+    </form>

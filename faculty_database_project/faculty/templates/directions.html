@@ -7,7 +7,7 @@
 {% block content %}
     <h1>Список направлений</h1>
 
-    <!-- Кнопка для добавления кафедры -->
+    <!-- Кнопка для добавления направления -->
     <a href="{% url 'direction_add' %}" class="btn btn-custom">Добавить направление</a>
 
     <!-- Таблица направлений -->
@@ -34,11 +34,13 @@
                     </td>
                     <td>{{ direction.department.department_name }}</td>
                     <td>
-
-                        <form action="{% url 'direction_delete' direction.direction_id %}" method="post" style="display: inline;">
-                            {% csrf_token %}
-                            <button type="submit"  class="btn btn-custom" onclick="return confirm('Вы уверены, что хотите удалить это направление?');">Удалить</button>
-                        </form>
+                        <div class="buttons-container">
+                            <a href="{% url 'direction_change' direction.direction_id %}" class="btn btn-custom">Изменить</a>
+                            <form action="{% url 'direction_delete' direction.direction_id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit"  class="btn btn-custom" onclick="return confirm('Вы уверены, что хотите удалить это направление?');">Удалить</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             {% empty %}
