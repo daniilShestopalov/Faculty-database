@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+<meta charset="UTF-8">
+
+
+{% block title %}Изменение группы{% endblock %}
+
+{% block content %}
+    <h1>Изменение группы</h1>
+
+    <form action="{% url 'group_change_confirm' group_id=group.group_id %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="groupNumber">Номер группы:</label>
+            <input type="text" class="form-control" id="groupNumber" name="group_number" placeholder="Введите номер группы" required oninput="checkPositiveInteger(this)" value="{{ group.group_number }}">
+        </div>
+        <div class="form-group">
+            <label for="groupCourseNumber">Курс группы:</label>
+            <input type="text" class="form-control" id="groupCourseNumber" name="group_course_number" placeholder="Введите курс группы" required oninput="checkPositiveIntegerInRange(this)" value="{{ group.group_course_number }}">
+        </div>
+        <div class="form-group">
+            <label for="direction">Направление:</label>
+            <select class="form-control" id="direction" name="direction" required>
+                <option value="">Выберите направление</option>
+                {% for direction in directions %}
+                    <option value="{{ direction.direction_id }}" {% if group.direction.direction_id == direction.direction_id %}selected{% endif %}>
+                        {{ direction.direction_name }} {{ direction.specialization|default_if_none:"" }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="curator">Куратор:</label>
+            <select class="form-control" id="curator" name="curator" required>
+                <option value="">Выберите куратора</option>
+                {% for curator in curators %}
+                    <option value="{{ curator.curator_id }}" {% if group.curator.curator_id == curator.curator_id %}selected{% endif %}>
+                        {{ curator.curator_second_name }} {{ curator.curator_first_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="group_leader">Староста:</label>
+            <select class="form-control" id="group_leader" name="group_leader">
+                <option value="">Выберите старосту</option>
+                    {% for student in students %}
+                <option value="{{ student.student_id }}" {% if group.group_leader and group.group_leader.student_id == student.student_id %}selected{% endif %}>
+                    {{ student.student_second_name }} {{ student.student_first_name }}
+                </option>
+                    {% endfor %}
+            </select>
+        </div>
+        <a href="{% url 'group_list' %}" class="btn btn-custom">Вернуться к списку групп</a>
+        <button type="submit" class="btn btn-custom">Изменить группу</button>
+    </form>
+
+    <script>
+        function checkPositiveInteger(input) {
+            if (input.value <= 0 || !Number.isInteger(+input.value)) {
+                alert('Введите положительное целое число отличное от нуля');
+                input.value = ''; // Очищаем поле
+            }
+        }
+
+        function checkPositiveIntegerInRange(input) {
+            var value = parseInt(input.value, 10);
+            if (value < 1 || value > 6 || isNaN(value)) {
+                alert('Введите положительное целое число от 1 до 6');
+                input.value = ''; // Очищаем поле
+            }
+        }
+    </script>
+{% endblock %}

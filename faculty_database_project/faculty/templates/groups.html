@@ -7,7 +7,8 @@
 {% block content %}
     <h1>Список групп</h1>
 
-
+    <!-- Кнопка для добавления группы -->
+    <a href="{% url 'group_add' %}" class="btn btn-custom">Добавить группу</a>
 
     <!-- Таблица групп -->
     <table class="table table-hover">
@@ -31,19 +32,20 @@
                     <td>{{ group.direction.direction_name }}</td>
                     <td>
                         {% if group.curator %}
-                        {{ group.curator.curator_first_name }} {{ group.curator.curator_second_name }}
+                        {{ group.curator.curator_second_name }} {{ group.curator.curator_first_name }}
                         {% else %}
                             Отсутствует
                         {% endif %}
                     </td>
                     <td>
                         {% if group.group_leader %}
-                        {{ group.group_leader.student_first_name }} {{ group.group_leader.student_second_name }}
+                        {{ group.group_leader.student_second_name }} {{ group.group_leader.student_first_name }}
                         {% else %}
                             Отсутствует
                         {% endif %}</td>
                     <td>
                         <div class="buttons-container">
+                            <a href="{% url 'group_change' group.group_id %}" class="btn btn-custom">Изменить</a>
                             <form action="{% url 'group_delete' group.group_id %}" method="post" style="display: inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-custom" onclick="return confirm('Вы уверены, что хотите удалить эту группу?');">Удалить</button>

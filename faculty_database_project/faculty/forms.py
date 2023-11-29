@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 from .models import Department, Direction, Student, Group, Curator
 
+
 class DepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
@@ -25,6 +26,7 @@ class DepartmentForm(forms.ModelForm):
             raise ValidationError("Сокращенное название кафедры должно содержать только русские буквы.")
 
         return department_name_short
+
 
 class CuratorForm(forms.ModelForm):
     class Meta:
@@ -67,8 +69,8 @@ class CuratorForm(forms.ModelForm):
 
         return curator_contact_number
 
-class DirectionForm(forms.ModelForm):
 
+class DirectionForm(forms.ModelForm):
     class Meta:
         model = Direction
         fields = ['direction_name', 'specialization', 'department']
@@ -85,7 +87,47 @@ class DirectionForm(forms.ModelForm):
         specialization = self.cleaned_data['specialization']
         if specialization is not None:
             if not re.match(r'^[а-яА-ЯёЁ\s]+$', specialization):
-                    raise ValidationError("Специализация направления должна содержать только русские буквы.")
+                raise ValidationError("Специализация направления должна содержать только русские буквы.")
 
         return specialization
 
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['group_number', 'group_course_number', 'direction', 'curator', 'group_leader']
+
+    def clean_group_number(self):
+        group_number = self.cleaned_data['group_number']
+        try:
+            group_number_int = int(group_number)
+            if group_number_int <= 0:
+                raise ValidationError("Номер группы должен быть положительным целым числом.")
+        except ValueError:
+            raise ValidationError("Номер группы должен быть целым числом.")
+        return group_number
+
+    def clean_group_course_number(self):
+        group_course_number = self.cleaned_data['group_course_number']
+        try:
+            group_course_number_int = int(group_course_number)
+            if group_course_number_int <= 0 or group_course_number_int > 6:
+                raise ValidationError("Номер курса группы должен быть целым числом от 1 до 6.")
+        except ValueError:
+            raise ValidationError("Номер курса группы должен быть целым числом.")
+        return group_course_number
+
+    def clean(self):
+        cleaned_data = super().clean()
+        group_number = cleaned_data.get('group_number')
+        group_course_number = cleaned_data.get('group_course_number')
+
+        if self.instance.pk is None:
+            if Group.objects.filter(group_number=group_number, group_course_number=group_course_number).exists():
+                raise ValidationError("Группа с таким номером курса и номером группы уже существует.")
+        else:
+            if Group.objects.filter(group_number=group_number, group_course_number=group_course_number).exclude(
+                    pk=self.instance.pk).exists():
+                raise ValidationError("Другая группа с таким номером курса и номером группы уже существует.")
+
+        return cleaned_data

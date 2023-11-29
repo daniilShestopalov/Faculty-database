@@ -41,6 +41,10 @@ urlpatterns = [
     path('direction/change/<int:direction_id>/confirm/', views.direction_change_confirm, name='direction_change_confirm'),
     path('groups/', views.group_list, name='group_list'),
     path('groups/delete/<int:group_id>/', views.delete_group, name='group_delete'),
+    path('group/add/', views.group_add, name='group_add'),
+    path('group/add/confirm/', views.group_add_confirm, name='group_add_confirm'),
+    path('group/change/<int:group_id>/', views.group_change, name='group_change'),
+    path('group/change/<int:group_id>/confirm/', views.group_change_confirm, name='group_change_confirm'),
     path('students/', views.student_list, name='student_list'),
     path('students/delete/<int:student_id>/', views.delete_student, name='student_delete'),
 ]

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.urls import reverse
 
-from .forms import DepartmentForm, CuratorForm, DirectionForm
+from .forms import DepartmentForm, CuratorForm, DirectionForm, GroupForm
 from .models import Curator, Department, Direction, Student, Group
 
 
@@ -193,6 +193,61 @@ def group_list(request):
     groups = Group.objects.all()
     return render(request, 'groups.html', {'groups': groups})
 
+def group_add(request):
+    curators = Curator.objects.all()
+    directions = Direction.objects.all()
+    return render(request, 'group_add.html', {'curators': curators, 'directions': directions})
+
+def group_add_confirm(request):
+    if request.method == 'POST':
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            group = form.save(commit=False)
+            group.group_leader = None
+            group.save()
+            form.save_m2m()
+            messages.success(request, 'Группа успешно добавлена.')
+            return redirect('group_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                if field == '__all__':
+                    errors.extend(error_messages)
+                else:
+                    field_label = form.fields[field].label or field
+                    for error in error_messages:
+                        errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return group_add(request)
+
+def group_change(request, group_id):
+    curators = Curator.objects.all()
+    directions = Direction.objects.all()
+    students = Student.objects.filter(group=group_id)
+    group = Group.objects.get(pk=group_id)
+    return render(request, 'group_change.html', {'group': group, 'curators': curators, 'directions': directions, 'students': students})
+
+def group_change_confirm(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    if request.method == 'POST':
+        form = GroupForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Группа успешно изменено.')
+            return redirect('group_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                if field == '__all__':
+                    errors.extend(error_messages)
+                else:
+                    field_label = form.fields[field].label or field
+                    for error in error_messages:
+                        errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return group_change(request, group_id)
 
 def delete_group(request, group_id):
     try:
