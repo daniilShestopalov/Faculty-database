@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+<meta charset="UTF-8">
+
+
+{% block title %}Добавление нового студента{% endblock %}
+
+{% block content %}
+    <h1>Добавление нового студента</h1>
+
+    <form action="{% url 'student_add_confirm' %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="studentSecondName">Фамилия студента:</label>
+            <input type="text" class="form-control" id="studentSecondName" name="student_second_name" placeholder="Введите фамилию студента" required oninput="checkInput(this)">
+        </div>
+        <div class="form-group">
+            <label for="studentFirstName">Имя студента:</label>
+            <input type="text" class="form-control" id="studentFirstName" name="student_first_name" placeholder="Введите имя студента" required oninput="checkInput(this)">
+        </div>
+        <div class="form-group">
+            <label for="studentMiddleName">Отчество студента:</label>
+            <input type="text" class="form-control" id="studentMiddleName" name="student_middle_name" placeholder="Введите отчество студента при наличии" required oninput="checkInput(this)">
+        </div>
+        <div class="form-group">
+            <label for="group">Группа:</label>
+            <select class="form-control" id="group" name="group" required>
+                <option value="">Выберите группу</option>
+                {% for group in groups %}
+                    <option value="{{ group.group_id }}">Группа №{{ group.group_number }}, Курс {{ group.group_course_number }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="student_status">Статус:</label>
+            <select class="form-control" id="student_status" name="student_status" required>
+                <option value="">Выберите статус</option>
+                    {% for status_value, status_display in student_statuses %}
+                <option value="{{ status_value }}">
+                    {% if status_display == 'Study' %}
+                            Учится
+                        {% elif status_display == 'Alumnus' %}
+                            Выпускник
+                        {% elif status_display == 'Expelled' %}
+                            Отчислен
+                        {% else %}
+                            Неизвестен
+                        {% endif %}
+                    </option>
+                    {% endfor %}
+            </select>
+        </div>
+        <a href="{% url 'student_list' %}" class="btn btn-custom">Вернуться к списку студентов</a>
+        <button type="submit" class="btn btn-custom">Добавить студента</button>
+    </form>
+
+    <script>
+        function checkInput(input) {
+            input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
+        }
+    </script>
+{% endblock %}

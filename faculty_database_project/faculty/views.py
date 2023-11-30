@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 from django.urls import reverse
 
-from .forms import DepartmentForm, CuratorForm, DirectionForm, GroupForm
+from .forms import DepartmentForm, CuratorForm, DirectionForm, GroupForm, StudentForm
 from .models import Curator, Department, Direction, Student, Group
 
 
@@ -14,7 +14,8 @@ def home(request):
 
 def curator_list(request):
     curators = Curator.objects.all()
-    return render(request, 'curators.html', {'curators': curators})
+    count = curators.count()
+    return render(request, 'curators.html', {'curators': curators, 'count': count})
 
 def curator_add(request):
     return render(request, 'curator_add.html')
@@ -67,7 +68,8 @@ def delete_curator(request, curator_id):
 
 def department_list(request):
     departments = Department.objects.all()
-    return render(request, 'departments.html', {'departments': departments})
+    count = departments.count()
+    return render(request, 'departments.html', {'departments': departments, 'count': count})
 
 
 def department_add(request):
@@ -129,7 +131,8 @@ def delete_department(request, department_id):
 
 def direction_list(request):
     directions = Direction.objects.all()
-    return render(request, 'directions.html', {'directions': directions})
+    count = directions.count()
+    return render(request, 'directions.html', {'directions': directions, 'count': count})
 
 def direction_add(request):
     departments = Department.objects.all()
@@ -191,7 +194,8 @@ def delete_direction(request, direction_id):
 
 def group_list(request):
     groups = Group.objects.all()
-    return render(request, 'groups.html', {'groups': groups})
+    count = groups.count()
+    return render(request, 'groups.html', {'groups': groups, 'count': count})
 
 def group_add(request):
     curators = Curator.objects.all()
@@ -264,8 +268,60 @@ def delete_group(request, group_id):
 
 def student_list(request):
     students = Student.objects.all()
-    return render(request, 'students.html', {'students': students})
+    count = students.count()
+    return render(request, 'students.html', {'students': students, 'count': count})
 
+def student_add(request):
+    student_statuses = Student.STUDENT_STATUS_CHOICES
+    groups = Group.objects.all()
+    return render(request, 'student_add.html', {'student_statuses': student_statuses, 'groups': groups})
+
+def student_add_confirm(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Студент успешно добавлен.')
+            return redirect('student_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                if field == '__all__':
+                    errors.extend(error_messages)
+                else:
+                    field_label = form.fields[field].label or field
+                    for error in error_messages:
+                        errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return group_add(request)
+
+def student_change(request, student_id):
+    student = Student.objects.get(pk=student_id)
+    groups = Group.objects.all()
+    student_statuses = Student.STUDENT_STATUS_CHOICES
+    return render(request, 'student_change.html', {'groups': groups, 'student': student, 'student_statuses': student_statuses})
+
+def student_change_confirm(request, student_id):
+    student = Student.objects.get(pk=student_id)
+    if request.method == 'POST':
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Студент успешно изменен.')
+            return redirect('student_list')
+        else:
+            errors = []
+            for field, error_messages in form.errors.items():
+                if field == '__all__':
+                    errors.extend(error_messages)
+                else:
+                    field_label = form.fields[field].label or field
+                    for error in error_messages:
+                        errors.append(f"{field_label}: {error}")
+            messages.error(request, '\n'.join(errors))
+
+    return student_change(request, student_id)
 
 def delete_student(request, student_id):
     student = Student.objects.get(pk=student_id)

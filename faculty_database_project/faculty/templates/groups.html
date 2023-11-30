@@ -7,6 +7,8 @@
 {% block content %}
     <h1>Список групп</h1>
 
+    <p class="count">Количество групп: {{ count }}</p>
+
     <!-- Кнопка для добавления группы -->
     <a href="{% url 'group_add' %}" class="btn btn-custom">Добавить группу</a>
 

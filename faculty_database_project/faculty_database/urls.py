@@ -47,5 +47,10 @@ urlpatterns = [
     path('group/change/<int:group_id>/confirm/', views.group_change_confirm, name='group_change_confirm'),
     path('students/', views.student_list, name='student_list'),
     path('students/delete/<int:student_id>/', views.delete_student, name='student_delete'),
+    path('student/add/', views.student_add, name='student_add'),
+    path('student/add/confirm/', views.student_add_confirm, name='student_add_confirm'),
+    path('student/change/<int:student_id>/', views.student_change, name='student_change'),
+    path('student/change/<int:student_id>/confirm/', views.student_change_confirm, name='student_change_confirm'),
+
 ]
 

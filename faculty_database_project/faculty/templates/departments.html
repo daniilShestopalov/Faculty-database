@@ -7,6 +7,8 @@
 {% block content %}
     <h1>Список кафедр</h1>
 
+    <p class="count">Количество кафедр: {{ count }}</p>
+
     <!-- Кнопка для добавления кафедры -->
     <a href="{% url 'department_add' %}" class="btn btn-custom">Добавить кафедру</a>
 

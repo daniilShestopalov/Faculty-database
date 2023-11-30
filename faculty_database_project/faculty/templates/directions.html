@@ -7,6 +7,8 @@
 {% block content %}
     <h1>Список направлений</h1>
 
+    <p class="count">Количество направлений: {{ count }}</p>
+
     <!-- Кнопка для добавления направления -->
     <a href="{% url 'direction_add' %}" class="btn btn-custom">Добавить направление</a>
 

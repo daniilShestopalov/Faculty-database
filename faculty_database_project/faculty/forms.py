@@ -37,7 +37,7 @@ class CuratorForm(forms.ModelForm):
         curator_second_name = self.cleaned_data['curator_second_name']
 
         if not re.match(r'^[а-яА-ЯёЁ\s]+$', curator_second_name):
-            raise ValidationError("Фамилия куратора должно содержать только русские буквы.")
+            raise ValidationError("Фамилия куратора должна содержать только русские буквы.")
 
         return curator_second_name
 
@@ -131,3 +131,44 @@ class GroupForm(forms.ModelForm):
                 raise ValidationError("Другая группа с таким номером курса и номером группы уже существует.")
 
         return cleaned_data
+
+class StudentForm(forms.ModelForm):
+
+    class Meta:
+        model = Student
+        fields = ['student_second_name', 'student_first_name', 'student_middle_name', 'group', 'student_status']
+
+    def clean_student_second_name(self):
+        student_second_name = self.cleaned_data['student_second_name']
+
+        if not re.match(r'^[а-яА-ЯёЁ\s]+$', student_second_name):
+            raise ValidationError("Фамилия студента должна содержать только русские буквы.")
+
+        return student_second_name
+
+    def clean_student_first_name(self):
+        student_first_name = self.cleaned_data['student_first_name']
+
+        if not re.match(r'^[а-яА-ЯёЁ\s]+$', student_first_name):
+            raise ValidationError("Имя студента должно содержать только русские буквы.")
+
+        return student_first_name
+
+    def clean_student_middle_name(self):
+        student_middle_name = self.cleaned_data['student_middle_name']
+        if student_middle_name is not None:
+            if not re.match(r'^[а-яА-ЯёЁ\s]+$', student_middle_name):
+                raise ValidationError("Отчество студента должно содержать только русские буквы.")
+
+        return student_middle_name
+
+    def clean_student_status(self):
+        student_status = self.cleaned_data['student_status']
+
+        valid_statuses = [choice[0] for choice in Student.STUDENT_STATUS_CHOICES]
+
+        if student_status not in valid_statuses:
+            raise ValidationError("Недопустимый статус студента. Выберите корректный статус.")
+
+        return student_status
+

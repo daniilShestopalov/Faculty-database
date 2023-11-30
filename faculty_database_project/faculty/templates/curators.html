@@ -7,6 +7,8 @@
 {% block content %}
     <h1>Список кураторов</h1>
 
+    <p class="count">Количество кураторов: {{ count }}</p>
+
     <!-- Кнопка для добавления куратора -->
     <a href="{% url 'curator_add' %}" class="btn btn-custom">Добавить куратора</a>
 
