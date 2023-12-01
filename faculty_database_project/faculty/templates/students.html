@@ -26,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for student in students %}
+            {% for student in page_students %}
                 <tr>
                     <td>{{ student.student_id }}</td>
                     <td>{{ student.student_second_name }}</td>
@@ -67,4 +67,32 @@
             {% endfor %}
         </tbody>
     </table>
+
+<!-- Pagination buttons -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_students.has_previous %}
+            <a href="?page=1"><button class="btn btn-custom">&laquo; Первая</button></a>
+            <a href="?page={{ page_students.previous_page_number }}"><button class="btn btn-custom">Предыдущая</button></a>
+        {% endif %}
+
+        {% for num in page_students.paginator.page_range %}
+            {% if page_students.number == num %}
+                <button class="btn btn-current">{{ num }}</button>
+            {% elif num > page_students.number|add:'-6' and num < page_students.number|add:'6' %}
+                <a href="?page={{ num }}"><button class="btn btn-custom">{{ num }}</button></a>
+            {% elif num == 1 or num == page_students.paginator.num_pages %}
+                <a href="?page={{ num }}"><button class="btn btn-custom">{{ num }}</button></a>
+            {% elif num == page_students.number|add:'-6' or num == page_students.number|add:'6' %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_students.has_next %}
+            <a href="?page={{ page_students.next_page_number }}"><button class="btn btn-custom">Следующая</button></a>
+            <a href="?page={{ page_students.paginator.num_pages }}"><button
+                    class="btn btn-custom">Последняя &raquo;</button></a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

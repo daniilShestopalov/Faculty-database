@@ -132,8 +132,8 @@ class GroupForm(forms.ModelForm):
 
         return cleaned_data
 
-class StudentForm(forms.ModelForm):
 
+class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ['student_second_name', 'student_first_name', 'student_middle_name', 'group', 'student_status']
@@ -171,4 +171,3 @@ class StudentForm(forms.ModelForm):
             raise ValidationError("Недопустимый статус студента. Выберите корректный статус.")
 
         return student_status
-

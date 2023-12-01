@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import IntegrityError
 from django.urls import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import DepartmentForm, CuratorForm, DirectionForm, GroupForm, StudentForm
 from .models import Curator, Department, Direction, Student, Group
@@ -13,12 +14,22 @@ def home(request):
 
 
 def curator_list(request):
-    curators = Curator.objects.all()
+    curators = Curator.objects.order_by('curator_id')
     count = curators.count()
-    return render(request, 'curators.html', {'curators': curators, 'count': count})
+    pages = Paginator(curators, 25)
+    page_number = request.GET.get('page')
+    try:
+        page_curators = pages.get_page(page_number)
+    except PageNotAnInteger:
+        page_curators = pages.page(1)
+    except EmptyPage:
+        page_curators = pages.page(pages.num_pages)
+    return render(request, 'curators.html', {'page_curators': page_curators, 'count': count})
+
 
 def curator_add(request):
     return render(request, 'curator_add.html')
+
 
 def curator_add_confirm(request):
     if request.method == 'POST':
@@ -37,9 +48,11 @@ def curator_add_confirm(request):
 
         return curator_add(request)
 
+
 def curator_change(request, curator_id):
     curator = Curator.objects.get(pk=curator_id)
     return render(request, 'curator_change.html', {'curator': curator})
+
 
 def curator_change_confirm(request, curator_id):
     curator = Curator.objects.get(pk=curator_id)
@@ -67,9 +80,17 @@ def delete_curator(request, curator_id):
 
 
 def department_list(request):
-    departments = Department.objects.all()
+    departments = Department.objects.order_by('department_id')
     count = departments.count()
-    return render(request, 'departments.html', {'departments': departments, 'count': count})
+    pages = Paginator(departments, 10)
+    page_number = request.GET.get('page')
+    try:
+        page_departments = pages.get_page(page_number)
+    except PageNotAnInteger:
+        page_departments = pages.page(1)
+    except EmptyPage:
+        page_departments = pages.page(pages.num_pages)
+    return render(request, 'departments.html', {'page_departments': page_departments, 'count': count})
 
 
 def department_add(request):
@@ -93,9 +114,11 @@ def department_add_confirm(request):
 
     return department_add(request)
 
+
 def department_change(request, department_id):
     department = Department.objects.get(pk=department_id)
     return render(request, 'departmental_change.html', {'department': department})
+
 
 def department_change_confirm(request, department_id):
     department = Department.objects.get(pk=department_id)
@@ -132,11 +155,22 @@ def delete_department(request, department_id):
 def direction_list(request):
     directions = Direction.objects.all()
     count = directions.count()
-    return render(request, 'directions.html', {'directions': directions, 'count': count})
+    pages = Paginator(directions, 10)
+    page_number = request.GET.get('page')
+    try:
+        page_direction = pages.get_page(page_number)
+    except PageNotAnInteger:
+        page_direction = pages.page(1)
+    except EmptyPage:
+        page_direction = pages.page(pages.num_pages)
+
+    return render(request, 'directions.html', {'page_direction': page_direction, 'count': count})
+
 
 def direction_add(request):
     departments = Department.objects.all()
     return render(request, 'direction_add.html', {'departments': departments})
+
 
 def direction_add_confirm(request):
     if request.method == 'POST':
@@ -155,10 +189,12 @@ def direction_add_confirm(request):
 
     return direction_add(request)
 
+
 def direction_change(request, direction_id):
     departments = Department.objects.all()
     direction = Direction.objects.get(pk=direction_id)
     return render(request, 'direction_change.html', {'departments': departments, 'direction': direction})
+
 
 def direction_change_confirm(request, direction_id):
     direction = Direction.objects.get(pk=direction_id)
@@ -195,12 +231,22 @@ def delete_direction(request, direction_id):
 def group_list(request):
     groups = Group.objects.all()
     count = groups.count()
-    return render(request, 'groups.html', {'groups': groups, 'count': count})
+    pages = Paginator(groups, 10)
+    page_number = request.GET.get('page')
+    try:
+        page_group = pages.get_page(page_number)
+    except PageNotAnInteger:
+        page_group = pages.page(1)
+    except EmptyPage:
+        page_group = pages.page(pages.num_pages)
+    return render(request, 'groups.html', {'page_group': page_group, 'count': count})
+
 
 def group_add(request):
     curators = Curator.objects.all()
     directions = Direction.objects.all()
     return render(request, 'group_add.html', {'curators': curators, 'directions': directions})
+
 
 def group_add_confirm(request):
     if request.method == 'POST':
@@ -225,12 +271,15 @@ def group_add_confirm(request):
 
     return group_add(request)
 
+
 def group_change(request, group_id):
     curators = Curator.objects.all()
     directions = Direction.objects.all()
     students = Student.objects.filter(group=group_id)
     group = Group.objects.get(pk=group_id)
-    return render(request, 'group_change.html', {'group': group, 'curators': curators, 'directions': directions, 'students': students})
+    return render(request, 'group_change.html',
+                  {'group': group, 'curators': curators, 'directions': directions, 'students': students})
+
 
 def group_change_confirm(request, group_id):
     group = Group.objects.get(pk=group_id)
@@ -253,6 +302,7 @@ def group_change_confirm(request, group_id):
 
     return group_change(request, group_id)
 
+
 def delete_group(request, group_id):
     try:
         group = Group.objects.get(pk=group_id)
@@ -267,14 +317,24 @@ def delete_group(request, group_id):
 
 
 def student_list(request):
-    students = Student.objects.all()
+    students = Student.objects.order_by('student_id')
     count = students.count()
-    return render(request, 'students.html', {'students': students, 'count': count})
+    pages = Paginator(students, 25)
+    page_number = request.GET.get('page')
+    try:
+        page_students = pages.get_page(page_number)
+    except PageNotAnInteger:
+        page_students = pages.page(1)
+    except EmptyPage:
+        page_students = pages.page(pages.num_pages)
+    return render(request, 'students.html', {'page_students': page_students, 'count': count})
+
 
 def student_add(request):
     student_statuses = Student.STUDENT_STATUS_CHOICES
     groups = Group.objects.all()
     return render(request, 'student_add.html', {'student_statuses': student_statuses, 'groups': groups})
+
 
 def student_add_confirm(request):
     if request.method == 'POST':
@@ -296,11 +356,14 @@ def student_add_confirm(request):
 
     return group_add(request)
 
+
 def student_change(request, student_id):
     student = Student.objects.get(pk=student_id)
     groups = Group.objects.all()
     student_statuses = Student.STUDENT_STATUS_CHOICES
-    return render(request, 'student_change.html', {'groups': groups, 'student': student, 'student_statuses': student_statuses})
+    return render(request, 'student_change.html',
+                  {'groups': groups, 'student': student, 'student_statuses': student_statuses})
+
 
 def student_change_confirm(request, student_id):
     student = Student.objects.get(pk=student_id)
@@ -322,6 +385,7 @@ def student_change_confirm(request, student_id):
             messages.error(request, '\n'.join(errors))
 
     return student_change(request, student_id)
+
 
 def delete_student(request, student_id):
     student = Student.objects.get(pk=student_id)

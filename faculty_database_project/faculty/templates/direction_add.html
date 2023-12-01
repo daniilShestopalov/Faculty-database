@@ -6,34 +6,36 @@
 {% block title %}Добавление нового направления{% endblock %}
 
 {% block content %}
-    <h1>Добавление нового направления</h1>
+<h1>Добавление нового направления</h1>
 
-    <form action="{% url 'direction_add_confirm' %}" method="post" novalidate>
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="directionName">Название направления:</label>
-            <input type="text" class="form-control" id="directionName" name="direction_name" placeholder="Введите название направления" required oninput="checkInput(this)">
-        </div>
-        <div class="form-group">
-            <label for="specialization">Специализация:</label>
-            <input type="text" class="form-control" id="specialization" name="specialization" placeholder="Введите специализацию" required oninput="checkInput(this)">
-        </div>
-        <div class="form-group">
-            <label for="department">Кафедра:</label>
-            <select class="form-control" id="department" name="department" required>
-                <option value="">Выберите кафедру</option>
-                {% for department in departments %}
-                    <option value="{{ department.department_id }}">{{ department.department_name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <a href="{% url 'direction_list' %}" class="btn btn-custom">Вернуться к списку направлений</a>
-        <button type="submit" class="btn btn-custom">Добавить направление</button>
-    </form>
+<form action="{% url 'direction_add_confirm' %}" method="post" novalidate>
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="directionName">Название направления:</label>
+        <input type="text" class="form-control" id="directionName" name="direction_name"
+               placeholder="Введите название направления" required oninput="checkInput(this)">
+    </div>
+    <div class="form-group">
+        <label for="specialization">Специализация:</label>
+        <input type="text" class="form-control" id="specialization" name="specialization"
+               placeholder="Введите специализацию" required oninput="checkInput(this)">
+    </div>
+    <div class="form-group">
+        <label for="department">Кафедра:</label>
+        <select class="form-control" id="department" name="department" required>
+            <option value="">Выберите кафедру</option>
+            {% for department in departments %}
+            <option value="{{ department.department_id }}">{{ department.department_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <a href="{% url 'direction_list' %}" class="btn btn-custom">Вернуться к списку направлений</a>
+    <button type="submit" class="btn btn-custom">Добавить направление</button>
+</form>
 
-    <script>
-        function checkInput(input) {
-            input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
-        }
-    </script>
+<script>
+    function checkInput(input) {
+        input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
+    }
+</script>
 {% endblock %}
