@@ -12,6 +12,40 @@
 <!-- Кнопка для добавления куратора -->
 <a href="{% url 'curator_add' %}" class="btn btn-custom">Добавить куратора</a>
 
+<p><button style="margin-top: 20px;" class="btn btn-custom" onclick="toggleSearch()">Поиск</button></p>
+<div id="searchForm" style="display: none;">
+    <form action="{% url 'curator_search' %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+                <label for="curator_id">Id куратора:</label>
+                <input type="text" class="form-control" id="curator_id" name="curator_id" placeholder="Введите id" required oninput="checkPositiveInteger(this)">
+            </div>
+    <div class="form-group">
+        <label for="curatorSecondName">Фамилия куратора:</label>
+        <input type="text" class="form-control" id="curatorSecondName" name="curator_second_name"
+               placeholder="Введите фамилию куратора" required oninput="checkInput(this)">
+    </div>
+    <div class="form-group">
+        <label for="curatorFirstName">Имя куратора:</label>
+        <input type="text" class="form-control" id="curatorFirstName" name="curator_first_name"
+               placeholder="Введите имя куратора" required oninput="checkInput(this)">
+    </div>
+    <div class="form-group">
+        <label for="curatorMiddleName">Отчество куратора:</label>
+        <input type="text" class="form-control" id="curatorMiddleName" name="curator_middle_name"
+               placeholder="Введите отчество куратора при наличии" required oninput="checkInput(this)">
+           <label for="search_by_middle_name">Искать по отчеству</label>
+    <input type="checkbox" id="search_by_middle_name" name="search_by_middle_name" value="yes">
+    </div>
+    <div class="form-group">
+        <label for="curatorContactNumber">Номер телефона куратора:</label>
+        <input type="text" class="form-control" id="curatorContactNumber" name="curator_contact_number"
+               placeholder="Введите номер телефона куратора" required oninput="checkPhoneNumber(this)">
+    </div>
+            <button type="submit" class="btn btn-custom">Найти</button>
+    </form>
+</div>
+
 <!-- Таблица кураторов -->
 <table class="table table-hover">
     <thead>
@@ -30,7 +64,8 @@
         <td>{{ curator.curator_id }}</td>
         <td>{{ curator.curator_second_name }}</td>
         <td>{{ curator.curator_first_name }}</td>
-        <td>{{ curator.curator_middle_name }}</td>
+        <td> {{ curator.curator_middle_name|default_if_none:'' }}
+        </td>
         <td>{{ curator.curator_contact_number }}</td>
         <td>
             <div class="buttons-container">

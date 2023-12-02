@@ -26,8 +26,7 @@
         <select class="form-control" id="direction" name="direction" required>
             <option value="">Выберите направление</option>
             {% for direction in directions %}
-            <option value="{{ direction.direction_id }}" {% if group.direction.direction_id== direction.direction_id
-                    %}selected{% endif %}>
+            <option value="{{ direction.direction_id }}" {% if group.direction.direction_id == direction.direction_id %}selected{% endif %}>
                 {{ direction.direction_name }} {{ direction.specialization|default_if_none:"" }}
             </option>
             {% endfor %}
@@ -38,8 +37,7 @@
         <select class="form-control" id="curator" name="curator" required>
             <option value="">Выберите куратора</option>
             {% for curator in curators %}
-            <option value="{{ curator.curator_id }}" {% if group.curator.curator_id== curator.curator_id %}selected{%
-                    endif %}>
+            <option value="{{ curator.curator_id }}" {% if group.curator.curator_id == curator.curator_id %} selected {% endif %}>
                 {{ curator.curator_second_name }} {{ curator.curator_first_name }}
             </option>
             {% endfor %}
@@ -50,8 +48,7 @@
         <select class="form-control" id="group_leader" name="group_leader">
             <option value="">Выберите старосту</option>
             {% for student in students %}
-            <option value="{{ student.student_id }}" {% if group.group_leader and group.group_leader.student_id==
-                    student.student_id %}selected{% endif %}>
+            <option value="{{ student.student_id }}" {% if group.group_leader and group.group_leader.student_id == student.student_id %}selected{% endif %}>
                 {{ student.student_second_name }} {{ student.student_first_name }}
             </option>
             {% endfor %}
@@ -61,20 +58,4 @@
     <button type="submit" class="btn btn-custom">Изменить группу</button>
 </form>
 
-<script>
-    function checkPositiveInteger(input) {
-        if (input.value <= 0 || !Number.isInteger(+input.value)) {
-            alert('Введите положительное целое число отличное от нуля');
-            input.value = ''; // Очищаем поле
-        }
-    }
-
-    function checkPositiveIntegerInRange(input) {
-        var value = parseInt(input.value, 10);
-        if (value < 1 || value > 6 || isNaN(value)) {
-            alert('Введите положительное целое число от 1 до 6');
-            input.value = ''; // Очищаем поле
-        }
-    }
-</script>
 {% endblock %}

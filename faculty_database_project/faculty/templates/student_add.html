@@ -30,38 +30,32 @@
         <select class="form-control" id="group" name="group" required>
             <option value="">Выберите группу</option>
             {% for group in groups %}
-            <option value="{{ group.group_id }}">Группа №{{ group.group_number }}, Курс {{ group.group_course_number
-                }}
+            <option value="{{ group.group_id }}">Группа №{{ group.group_number }}, Курс {{ group.group_course_number }}
             </option>
             {% endfor %}
         </select>
     </div>
     <div class="form-group">
-        <label for="student_status">Статус:</label>
-        <select class="form-control" id="student_status" name="student_status" required>
-            <option value="">Выберите статус</option>
-            {% for status_value, status_display in student_statuses %}
-            <option value="{{ status_value }}">
-                {% if status_display == 'Study' %}
-                Учится
-                {% elif status_display == 'Alumnus' %}
-                Выпускник
-                {% elif status_display == 'Expelled' %}
-                Отчислен
-                {% else %}
-                Неизвестен
-                {% endif %}
-            </option>
-            {% endfor %}
-        </select>
-    </div>
+            <label for="student_status">Статус:</label>
+            <select class="form-control" id="student_status" name="student_status" required>
+                <option value="">Выберите статус</option>
+                    {% for status_value, status_display in student_statuses %}
+                        <option value="{{ status_value }}">
+                            {% if status_display == 'Study' %}
+                            Учится
+                        {% elif status_display == 'Alumnus' %}
+                            Выпускник
+                        {% elif status_display == 'Expelled' %}
+                            Отчислен
+                        {% else %}
+                            Неизвестен
+                        {% endif %}
+                    </option>
+                    {% endfor %}
+            </select>
+        </div>
     <a href="{% url 'student_list' %}" class="btn btn-custom">Вернуться к списку студентов</a>
     <button type="submit" class="btn btn-custom">Добавить студента</button>
 </form>
 
-<script>
-    function checkInput(input) {
-        input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
-    }
-</script>
 {% endblock %}

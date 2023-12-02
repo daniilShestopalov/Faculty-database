@@ -25,8 +25,7 @@
         <select class="form-control" id="direction" name="direction" required>
             <option value="">Выберите направление</option>
             {% for direction in directions %}
-            <option value="{{ direction.direction_id }}">{{ direction.direction_name }} {{
-                direction.specialization|default_if_none:"" }}
+            <option value="{{ direction.direction_id }}">{{ direction.direction_name }} {{ direction.specialization|default_if_none:"" }}
             </option>
             {% endfor %}
         </select>
@@ -36,8 +35,7 @@
         <select class="form-control" id="curator" name="curator" required>
             <option value="">Выберите куратора</option>
             {% for curator in curators %}
-            <option value="{{ curator.curator_id }}">{{ curator.curator_second_name }} {{ curator.curator_first_name
-                }}
+            <option value="{{ curator.curator_id }}">{{ curator.curator_second_name }} {{ curator.curator_first_name }}
             </option>
             {% endfor %}
         </select>
@@ -46,20 +44,4 @@
     <button type="submit" class="btn btn-custom">Добавить группу</button>
 </form>
 
-<script>
-    function checkPositiveInteger(input) {
-        if (input.value <= 0 || !Number.isInteger(+input.value)) {
-            alert('Введите положительное целое число отличное от нуля');
-            input.value = ''; // Очищаем поле
-        }
-    }
-
-    function checkPositiveIntegerInRange(input) {
-        var value = parseInt(input.value, 10);
-        if (value < 1 || value > 6 || isNaN(value)) {
-            alert('Введите положительное целое число от 1 до 6');
-            input.value = ''; // Очищаем поле
-        }
-    }
-</script>
 {% endblock %}

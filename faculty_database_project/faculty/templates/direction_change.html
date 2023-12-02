@@ -26,8 +26,7 @@
         <label for="department">Кафедра:</label>
         <select class="form-control" id="department" name="department" required>
             {% for department in departments %}
-            <option value="{{ department.department_id }}" {% if direction.department.department_id==
-                    department.department_id %}selected{% endif %}>
+            <option value="{{ department.department_id }}" {% if direction.department.department_id == department.department_id %}selected{% endif %}>
                 {{ department.department_name }}
             </option>
             {% endfor %}
@@ -38,9 +37,4 @@
     <button type="submit" class="btn btn-custom">Изменить направление</button>
 </form>
 
-<script>
-    function checkInput(input) {
-        input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
-    }
-</script>
 {% endblock %}

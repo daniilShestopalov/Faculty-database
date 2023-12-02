@@ -12,6 +12,40 @@
 <!-- Кнопка для добавления направления -->
 <a href="{% url 'direction_add' %}" class="btn btn-custom">Добавить направление</a>
 
+<p ><button style="margin-top: 20px;" class="btn btn-custom" onclick="toggleSearch()">Поиск</button></p>
+<div id="searchForm" style="display: none;">
+    <form action="{% url 'direction_search' %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="direction_id">Id направления:</label>
+            <input type="text" class="form-control" id="direction_id" name="direction_id" placeholder="Введите id" required oninput="checkPositiveInteger(this)">
+        </div>
+    <div class="form-group">
+        <label for="directionName">Название направления:</label>
+        <input type="text" class="form-control" id="directionName" name="direction_name"
+               placeholder="Введите название направления" required oninput="checkInput(this)">
+    </div>
+     <div class="form-group">
+        <label for="specialization">Специализация:</label>
+        <input type="text" class="form-control" id="specialization" name="specialization" placeholder="Введите специализацию">
+          <label for="search_by_specialization">Искать по специализации:</label>
+    <input type="checkbox" id="search_by_specialization" name="search_by_specialization" value="yes">
+    </div>
+
+    <div class="form-group">
+        <label for="department">Кафедра:</label>
+        <select class="form-control" id="department" name="department" required>
+            <option value="">Выберите кафедру</option>
+            {% for department in departments %}
+            <option value="{{ department.department_id }}"> {{ department.department_name }} </option>
+            {% endfor %}
+        </select>
+    </div>
+        <button type="submit" class="btn btn-custom">Найти</button>
+
+    </form>
+</div>
+
 <!-- Таблица направлений -->
 <table class="table table-hover">
     <thead>

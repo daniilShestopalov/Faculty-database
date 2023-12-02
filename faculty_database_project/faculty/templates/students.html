@@ -12,6 +12,67 @@
     <!-- Кнопка для добавления студента -->
     <a href="{% url 'student_add' %}" class="btn btn-custom">Добавить студента</a>
 
+<p><button style="margin-top: 20px;" class="btn btn-custom" onclick="toggleSearch()">Поиск</button></p>
+<div id="searchForm" style="display: none;">
+    <form action="{% url 'student_search' %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="student_id">Id студента:</label>
+            <input type="text" class="form-control" id="student_id" name="student_id" placeholder="Введите id" required oninput="checkPositiveInteger(this)">
+        </div>
+
+        <div class="form-group">
+            <label for="studentSecondName">Фамилия студента:</label>
+            <input type="text" class="form-control" id="studentSecondName" name="student_second_name" placeholder="Введите фамилию студента" required oninput="checkInput(this)">
+        </div>
+
+        <div class="form-group">
+            <label for="studentFirstName">Имя студента:</label>
+            <input type="text" class="form-control" id="studentFirstName" name="student_first_name" placeholder="Введите имя студента" required oninput="checkInput(this)">
+        </div>
+
+        <div class="form-group">
+            <label for="studentMiddleName">Отчество студента:</label>
+            <input type="text" class="form-control" id="studentMiddleName" name="student_middle_name" placeholder="Введите отчество студента при наличии" required oninput="checkInput(this)">
+            <label for="search_by_student_middle_name">Искать по специализации:</label>
+    <input type="checkbox" id="search_by_student_middle_name" name="search_by_student_middle_name" value="yes">
+        </div>
+
+        <div class="form-group">
+            <label for="group">Группа:</label>
+            <select class="form-control" id="group" name="group" required>
+                <option value="">Выберите группу</option>
+                {% for group in groups %}
+                <option value="{{ group.group_id }}">Группа №{{ group.group_number }}, Курс {{ group.group_course_number }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="student_status">Статус:</label>
+            <select class="form-control" id="student_status" name="student_status" required>
+                <option value="">Выберите статус</option>
+                {% for status_value, status_display in student_statuses %}
+                <option value="{{ status_value }}">
+                    {% if status_display == 'Study' %}
+                    Учится
+                    {% elif status_display == 'Alumnus' %}
+                    Выпускник
+                    {% elif status_display == 'Expelled' %}
+                    Отчислен
+                    {% else %}
+                    Неизвестен
+                    {% endif %}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-custom">Найти</button>
+    </form>
+</div>
+
+
     <!-- Таблица студентов -->
     <table class="table table-hover">
         <thead>
@@ -31,7 +92,8 @@
                     <td>{{ student.student_id }}</td>
                     <td>{{ student.student_second_name }}</td>
                     <td>{{ student.student_first_name }}</td>
-                    <td>{{ student.student_middle_name }}</td>
+                    <td> {{ student.student_middle_name|default_if_none:'' }}
+                    </td>
                     <td>
                         {% if student.group %}
                         Группа №{{ student.group.group_number }}, Курс {{ student.group.group_course_number }}

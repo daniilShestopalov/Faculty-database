@@ -53,6 +53,7 @@
 
         /* Стили для кнопок */
         .btn-custom {
+
             background-color: #7a5da9; /* более яркий фиолетовый */
             color: #fff; /* белый текст */
             border: none;
@@ -88,6 +89,18 @@
             margin-right: 5px; /* небольшой отступ справа */
             transform: scale(0.9)
         }
+        .input-row {
+    display: flex; /* Используем flexbox для расположения элементов в одну строку */
+    gap: 10px; /* Расстояние между элементами */
+    }
+
+    /   * Дополнительные стили для меток (опционально) */
+    label {
+    margin-right: 5px; /* Расстояние между меткой и полем ввода */
+    }
+    .form-control {
+    width: 325px; /* Изменяемая ширина полей ввода */
+    }
 
     </style>
 </head>
@@ -188,6 +201,42 @@
             $('#messageModal').modal('show');
         }
     });
+    function toggleSearch() {
+        var searchForm = document.getElementById('searchForm');
+        if (searchForm.style.display === 'none') {
+            searchForm.style.display = 'block';
+        } else {
+            searchForm.style.display = 'none';
+        }
+    }
+    function checkInput(input) {
+        input.value = input.value.replace(/[^а-яА-ЯёЁ\s-]/gi, '');
+    }
+
+    function checkPhoneNumber(input) {
+
+        input.value = input.value.replace(/[^\d]/g, '');
+
+        if (!input.value.startsWith('8')) {
+            input.value = '8' + input.value;
+         }
+
+        if (input.value.length > 11) {
+            input.value = input.value.slice(0, 11);
+        }
+    }
+    function checkPositiveInteger(input) {
+        if (input.value <= 0 || !Number.isInteger(+input.value)) {
+            input.value = ''; // Очищаем поле
+        }
+    }
+
+    function checkPositiveIntegerInRange(input) {
+        var value = parseInt(input.value, 10);
+        if (value < 1 || value > 6 || isNaN(value)) {
+            input.value = ''; // Очищаем поле
+        }
+    }
 </script>
 
 </body>
